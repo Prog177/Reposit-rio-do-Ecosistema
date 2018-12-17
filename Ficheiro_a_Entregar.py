@@ -64,7 +64,18 @@ def simular_populacoes (num_meses,param):
         MonthFor+=1
     EcosystemPython.close()    
     return FinalReturn
+
 #Aqui começa a Etapa 5
+def menu():
+    print("Quantos meses pretende simular?")
+    Output=""
+    while type(Months)!=int and Months!="q" and Months!="Q":
+        print("Caracter inválido!")
+        menu()
+    if type(Months)==int:
+        Output=menu()
+    return menu()
+    
 #Aqui começa a Etapa 6
 #Aqui começa a Etapa 7
 def simulador(nome_ficheiro):
