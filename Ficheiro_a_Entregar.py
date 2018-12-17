@@ -13,13 +13,9 @@
 #Plo0 = 5
 #Plomax = 100
 #Mlo = 0.0005
-Months=eval(input())
+q="q"
+Q="Q"
 Eco={0:50000,1:50,2:5}
-ConfigFileInternal=open('configuracao.txt','w')
-ConfigList=('Pce0=50000','Rce=1','Pcemax=100000','Mce=5','Pco0=50','Pcomax=1000','Mco=2','Plo0=5','Plomax=100','Mlo=0.0005')
-for ConfigIterator in ConfigList:
-    ConfigFileInternal.write=ConfigIterator
-ConfigFileInternal.close()
 def evoluir_populacao_cenouras (Pce,Rce,Pcemax,Mce,Pco):
     PceAfter=Pce+((Rce*Pce)*(1-(Pce/Pcemax)))-(Mce*Pco)
     return round(PceAfter)
@@ -68,28 +64,34 @@ def simular_populacoes (num_meses,param):
 #Aqui começa a Etapa 5
 def menu():
     print("Quantos meses pretende simular?")
+    Months=eval(input())
     Output=""
-    while type(Months)!=int and Months!="q" and Months!="Q":
+    if type(Months)!=int and Months!="q" and Months!="Q":
         print("Caracter inválido!")
         menu()
-    if type(Months)==int:
+    elif type(Months)==int:
         Output=menu()
-    return menu()
+    elif  Months=="q" or Months=="Q":
+        Output=Months
+    return Output
     
 #Aqui começa a Etapa 6
 #Aqui começa a Etapa 7
 def simulador(nome_ficheiro):
-    InternalFile=open('nome_ficheiro','r')
-    import InternalFile
-    if type(Months)==int:
-        simular_populacoes (Months,Eco)
-    elif Months=="q" or Months=="Q":
-        FinalAnswer="Simulador Terminado."
-    elif type(Months)!=int and not Months=="q" and not Months=="Q":
-        FinalAnswer="Caracter inválido!"
+    DicEco = {}
+    InternalFile=open(nome_ficheiro,'r')
+    for Lines in InternalFile:
+        palavras = Lines.split("=")        #Altera esta merda toda 
+        DicEco[palavras[0]] = float(palavras[1])
 
+    InternalFile.close()
+    print(DicEco)
+
+ 
+    FinalAnswer=simular_populacoes(menu(),Eco)
     return FinalAnswer
 print(simulador('configuracao.txt'))
 
 #Aqui começa a Etapa 8
 #Aqui começa a Etapa 9
+
