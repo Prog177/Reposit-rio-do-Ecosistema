@@ -14,7 +14,12 @@
 #Plomax = 100
 #Mlo = 0.0005
 Months=eval(input())
-Eco={0:50000,1:50,2:5}#Esta parte do Dicionário pode não ser utilizado na etapa 4 mas pode ser útil a posteriori
+Eco={0:50000,1:50,2:5}
+ConfigFileInternal=open('configuracao.txt','w')
+ConfigList=('Pce0=50000','Rce=1','Pcemax=100000','Mce=5','Pco0=50','Pcomax=1000','Mco=2','Plo0=5','Plomax=100','Mlo=0.0005')
+for ConfigIterator in ConfigList:
+    ConfigFileInternal.write=ConfigIterator
+ConfigFileInternal.close()
 def evoluir_populacao_cenouras (Pce,Rce,Pcemax,Mce,Pco):
     PceAfter=Pce+((Rce*Pce)*(1-(Pce/Pcemax)))-(Mce*Pco)
     return round(PceAfter)
@@ -35,16 +40,6 @@ def simular_populacoes (num_meses,param):
     Iteration=0
     Month=0
     MonthFor=0
-    Pce0=50000
-    Rce=1
-    Pcemax=100000
-    Mce=5
-    Pco0=50
-    Pcomax=1000
-    Mco=2
-    Plo0=5
-    Plomax=100
-    Mlo=0.0005
     EcosystemPython=open( 'Ecosystem.txt','w')  #Os ficheiros vão são ser utilizados mais à frente noutra etapa, muito provavelmente.
     FinalReturn=""
     if Iteration==0:
@@ -69,26 +64,21 @@ def simular_populacoes (num_meses,param):
         MonthFor+=1
     EcosystemPython.close()    
     return FinalReturn
-print(simular_populacoes (Months,Eco))
-
 #Aqui começa a Etapa 5
 #Aqui começa a Etapa 6
 #Aqui começa a Etapa 7
 def simulador(nome_ficheiro):
-    InternalFile=open('nome_ficheiro','w') 
+    InternalFile=open('nome_ficheiro','r')
+    import InternalFile
     if type(Months)==int:
-        EscapeGoat=simular_populacoes(Months,Eco) #Existe algo problema com o Ficheiro
-        InternalFile.writelines(EscapeGoat)
-        InternalFile.close()
-        InternalFile=open('nome_ficheiro','r')
-        FinalAnswer=InternalFile.read()
-        InternalFile.close()
+        simular_populacoes (Months,Eco)
     elif Months=="q" or Months=="Q":
         FinalAnswer="Simulador Terminado."
     elif type(Months)!=int and not Months=="q" and not Months=="Q":
         FinalAnswer="Caracter inválido!"
 
     return FinalAnswer
-print(simulador('Ecosystem.txt'))
+print(simulador('configuracao.txt'))
+
 #Aqui começa a Etapa 8
 #Aqui começa a Etapa 9
