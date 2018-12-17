@@ -1,12 +1,14 @@
 def simulador(nome_ficheiro):
-    InternalFile=open('nome_ficheiro','r')
-    import InternalFile  #Essta Merda tátoda fodida
-    if type(Months)==int:
-        simular_populacoes (Months,Eco)
-    elif Months=="q" or Months=="Q":
-        FinalAnswer="Simulador Terminado."
-    elif type(Months)!=int and not Months=="q" and not Months=="Q":
-        FinalAnswer="Caracter inválido!"
+    DicEco = {}
+    InternalFile=open(nome_ficheiro,'r')
+    for Lines in InternalFile:
+        palavras = Lines.split("=")        #Altera esta merda toda 
+        DicEco[palavras[0]] = float(palavras[1])
 
+    InternalFile.close()
+    print(DicEco)
+
+ 
+    FinalAnswer=simular_populacoes(menu(),Eco)
     return FinalAnswer
 print(simulador('configuracao.txt'))
