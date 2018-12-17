@@ -1,10 +1,13 @@
 def menu():
     print("Quantos meses pretende simular?")
+    Months=eval(input())
     Output=""
-    while type(Months)!=int and Months!="q" and Months!="Q":
+    if type(Months)!=int and Months!="q" and Months!="Q":
         print("Caracter inválido!")
         menu()
-    if type(Months)==int:
+    elif type(Months)==int:
         Output=menu()
-    return menu()
+    elif  Months=="q" or Months=="Q":
+        Output=Months
+    return Output
     
