@@ -1,40 +1,48 @@
-#Aqui começa a Etapa 4
 def simular_populacoes (num_meses,param):
     Iteration=0
     Month=0
-    Pce0=50000
-    Rce=1
-    Pcemax=100000
-    Mce=5
-    Pco0=50
-    Pcomax=1000
-    Mco=2
-    Plo0=5
-    Plomax=100
-    Mlo=0.0005
+    MonthFor=0
     EcosystemPython=open( 'Ecosystem.txt','w')  #Os ficheiros vão são ser utilizados mais à frente noutra etapa, muito provavelmente.
     FinalReturn=""
-    if Iteration==0:
-        EcosystemPython.write(('Mês '+str(Iteration)+' : '+str(50000) +' cenouras,'+str(50)+' coelhos,'+str(5)+' lobos')+('\n'))
-        Iteration+=4
-        Month+=1
-    while Iteration<=num_meses and not Iteration==0:
-        CenourasIntermidiate=evoluir_populacao_cenouras (Pce0,Rce,Pcemax,Mce,Pco0)
-        CoelhosIntermidiate=evoluir_populacao_coelhos (Pco0,Pce0,Mce,Pcomax,Mco,Plo0)
-        LobosIntermidiate=evoluir_populacao_lobos (Plo0,Pco0,Mco,Plomax,Mlo)
-        Pce0=CenourasIntermidiate
-        Pco0=CoelhosIntermidiate
-        Plo0=LobosIntermidiate
-        param[Iteration] = CenourasIntermidiate
-        param[Iteration+1] = CenourasIntermidiate
-        param[Iteration+2] = CenourasIntermidiate
-        EcosystemPython.write(('Mês '+str(Month)+' : '+str(Pce0) +' cenouras,'+str(Pco0)+' coelhos,'+str(Plo0)+' lobos')+('\n'))
-        Iteration+=3
-        Month+=1
-    for Iteration2 in param:
-        param[Iteration2]
-        FinalReturn+=param[Iteration2]+"\n"
-    EcosystemPython.close()    
-    return FinalReturn
+    FileConfig = open('configuracao.txt','r')
+    AlternateListCen=[]
+    AlternateListCo=[]
+    AlternateListLo=[]
+
+    for Iteration in range(0,(num_meses*10),10):
+        
+        if Iteration==0:
+            Month+=1
+            AlternateListCen.append(50000)
+            AlternateListCo.append(50)
+            AlternateListLo.append(5)
+
+        else:
+            print(Iteration)
+            print(param)
+            CenourasIntermidiate=evoluir_populacao_cenouras (param["Pce0"+str(Iteration)],param["Rce"],param["Pcemax"],param["Mce"],param["Pco0"+str(Iteration)])
+            CoelhosIntermidiate=evoluir_populacao_coelhos (param["Pco0"+str(Iteration)],param["Pce0"+str(Iteration)],param["Mce"],param["Pcomax"],param["Mco"],param["Plo0"+str(Iteration)])
+            LobosIntermidiate=evoluir_populacao_lobos (param["Plo0"+str(Iteration)],param["Pco0"+str(Iteration)],param["Mco"],param["Plomax"],param["Mlo"])
+            param[Pce0+Iteration] = int(CenourasIntermidiate)
+            param[Rce+Iteration] = param[1]
+            param[Pcemax+Iteration] = param[2]
+            param[Mce+Iteration] = param[3]
+            param[Pco0+Iteration] = str(CoelhosIntermidiate)
+            param[Pcomax+Iteration] = param[5]
+            param[Mco+Iteration] = param[6]
+            param[Plo0+Iteration] = str(LobosIntermidiate)
+            param[Plo0max+Iteration] = param[8]
+            param[Mlo+Iteration] = param[9]
+            AlternateListCen.append(CenourasIntermidiate)
+            AlternateListCo.append(CoelhosIntermidiate)
+            AlternateListLo.append(LobosIntermidiate)
+            EcosystemPython.write(('Mês '+str(Month)+' : '+str(param[Iteration]) +' cenouras,'+str(param[Iteration+4])+' coelhos,'+str(param[Iteration+7])+' lobos')+('\n'))
+            Month+=1
+
+    for Iteration2 in range(0,(num_meses*10),10):
+        FinalReturn += ('Mês '+str(MonthFor)+' : '+str(param[Pce0+Iteration2])+' cenouras,'+str(param[Pco0+Iteration2])+' coelhos,'+str(param[Pco0+Iteration2])+' lobos')+('\n')
+        MonthFor+=1
+        
+    return FinalReturn, AlternateListCen, AlternateListCo, AlternateListLo
 print(simular_populacoes (Months,Eco))
 
