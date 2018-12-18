@@ -24,9 +24,10 @@ def menu():
         nao_necessario, cenouras, coelhos, lobos = simulador(Months[-1])
         plt.plot(cenouras, color = 'g')
         plt.plot(coelhos, color = 'orange')
-        plt.plot(lobos, color = 'c')
+        plt.plot(lobos, color = 'b')
         plt.xlabel('Número de Meses')
         plt.ylabel('Número de Seres Vivos')
         plt.title('Evolução das Populações')
         plt.show()
-        return Output
+    return Output
+
