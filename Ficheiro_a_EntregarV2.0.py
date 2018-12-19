@@ -108,8 +108,7 @@ def simular_populacoes (num_meses,param):
             MonthFor+=1
         
     return FinalReturn, AlternateListCen, AlternateListCo, AlternateListLo
-InicialReturn,_,_,_=simular_populacoes (3,Eco)
-print(InicialReturn)
+
 #Aqui começa a Etapa 5
 import math
 import matplotlib.pyplot as plt
@@ -159,11 +158,10 @@ def obter_parametros(nome_ficheiro):
     return parametros
 #Aqui começa a Etapa 7
 def simulador(nome_ficheiro):
-    
-
-    DicEco = obter_parametros(nome_ficheiro)
+    FileConfig=open(nome_ficheiro,'r')
+    DicEco = obter_parametros(FileConfig)
     FileConfig.close()
-    print(DicEco)
+
 
     FuntionX=menu()
     FinalAnswer=simular_populacoes(FuntionX,DicEco)
@@ -184,4 +182,4 @@ def gravar_resultado_simulacao(nome_ficheiro, lista_pop_cenouras, lista_pop_coel
         resultados.write(str(lista_pop_lobos[i]) + '\n')
     return resultados
 
-
+simulador("configuracao.txt")
