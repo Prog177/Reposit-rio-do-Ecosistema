@@ -117,8 +117,8 @@ import matplotlib.pyplot as plt
 def menu():
     Months = []
     print('(s)imular, (d)esenhar gráfico')
-    Resposta = input('')
-    Resposta = Resposta.lower('')
+    Resposta = input()
+    Resposta = Resposta.lower()
     if Resposta == 's':
         print("Quantos meses pretende simular?")
         Months.append(eval(input()))
@@ -183,3 +183,4 @@ def gravar_resultado_simulacao(nome_ficheiro, lista_pop_cenouras, lista_pop_coel
     return resultados
 
 simulador("configuracao.txt")
+
