@@ -58,42 +58,57 @@ def simular_populacoes (num_meses,param):
     AlternateListCo=[]
     AlternateListLo=[]
 
-    for Iteration in range(0,(num_meses*10),10):
+    for Iteration in range(0,num_meses+1):
         
         if Iteration==0:
             Month+=1
             AlternateListCen.append(50000)
             AlternateListCo.append(50)
             AlternateListLo.append(5)
+            param["Pce0"+str(Iteration)] = param["Pce0"]
+            param["Rce"+str(Iteration)] = param["Rce"]
+            param["Pcemax"+str(Iteration)] = param["Pcemax"]
+            param["Mce"+str(Iteration)] = param["Mce"]
+            param["Pco0"+str(Iteration)] = param["Pco0"]
+            param["Pcomax"+str(Iteration)] = param["Pcomax"]
+            param["Mco"+str(Iteration)] = param["Mco"]
+            param["Plo0"+str(Iteration)] = param["Plo0"]
+            param["Plomax"+str(Iteration)] = param["Plomax"]
+            param["Mlo"+str(Iteration)] = param["Mlo"]
 
         else:
-            print(Iteration)
-            print(param)
+            
+            Iteration-=1
             CenourasIntermidiate=evoluir_populacao_cenouras (param["Pce0"+str(Iteration)],param["Rce"],param["Pcemax"],param["Mce"],param["Pco0"+str(Iteration)])
             CoelhosIntermidiate=evoluir_populacao_coelhos (param["Pco0"+str(Iteration)],param["Pce0"+str(Iteration)],param["Mce"],param["Pcomax"],param["Mco"],param["Plo0"+str(Iteration)])
             LobosIntermidiate=evoluir_populacao_lobos (param["Plo0"+str(Iteration)],param["Pco0"+str(Iteration)],param["Mco"],param["Plomax"],param["Mlo"])
-            param[Pce0+Iteration] = int(CenourasIntermidiate)
-            param[Rce+Iteration] = param[1]
-            param[Pcemax+Iteration] = param[2]
-            param[Mce+Iteration] = param[3]
-            param[Pco0+Iteration] = str(CoelhosIntermidiate)
-            param[Pcomax+Iteration] = param[5]
-            param[Mco+Iteration] = param[6]
-            param[Plo0+Iteration] = str(LobosIntermidiate)
-            param[Plo0max+Iteration] = param[8]
-            param[Mlo+Iteration] = param[9]
+            Iteration+=1
+            param["Pce0"+str(Iteration)] = int(CenourasIntermidiate)
+            param["Rce"+str(Iteration)] = param["Rce"]
+            param["Pcemax"+str(Iteration)] = param["Pcemax"]
+            param["Mce"+str(Iteration)] = param["Mce"]
+            param["Pco0"+str(Iteration)] = int(CoelhosIntermidiate)
+            param["Pcomax"+str(Iteration)] = param["Pcomax"]
+            param["Mco"+str(Iteration)] = param["Mco"]
+            param["Plo0"+str(Iteration)] = int(LobosIntermidiate)
+            param["Plomax"+str(Iteration)] = param["Plomax"]
+            param["Mlo"+str(Iteration)] = param["Mlo"]
             AlternateListCen.append(CenourasIntermidiate)
             AlternateListCo.append(CoelhosIntermidiate)
             AlternateListLo.append(LobosIntermidiate)
-            EcosystemPython.write(('Mês '+str(Month)+' : '+str(param[Iteration]) +' cenouras,'+str(param[Iteration+4])+' coelhos,'+str(param[Iteration+7])+' lobos')+('\n'))
             Month+=1
 
-    for Iteration2 in range(0,(num_meses*10),10):
-        FinalReturn += ('Mês '+str(MonthFor)+' : '+str(param[Pce0+Iteration2])+' cenouras,'+str(param[Pco0+Iteration2])+' coelhos,'+str(param[Pco0+Iteration2])+' lobos')+('\n')
-        MonthFor+=1
+    for Iteration2 in range(0,num_meses+1):
+        if Iteration2==0:
+            FinalReturn += ('Mês '+str(MonthFor)+' : '+str(param["Pce0"])+' cenouras,'+str(param["Pco0"])+' coelhos,'+str(param["Pco0"])+' lobos')+("\n")
+            MonthFor+=1
+
+        else:
+            FinalReturn += ('Mês '+str(MonthFor)+' : '+str(param["Pce0"+str(Iteration2)])+' cenouras,'+str(param["Pco0"+str(Iteration2)])+' coelhos,'+str(param["Plo0"+str(Iteration2)])+' lobos')+("\n")
+            MonthFor+=1
         
     return FinalReturn, AlternateListCen, AlternateListCo, AlternateListLo
-print(simular_populacoes (3,Eco))
+
 #Aqui começa a Etapa 5
 import math
 import matplotlib.pyplot as plt
@@ -143,11 +158,10 @@ def obter_parametros(nome_ficheiro):
     return parametros
 #Aqui começa a Etapa 7
 def simulador(nome_ficheiro):
-    
-
-    DicEco = obter_parametros(nome_ficheiro)
+    FileConfig=open(nome_ficheiro,'r')
+    DicEco = obter_parametros(FileConfig)
     FileConfig.close()
-    print(DicEco)
+
 
     FuntionX=menu()
     FinalAnswer=simular_populacoes(FuntionX,DicEco)
@@ -168,4 +182,4 @@ def gravar_resultado_simulacao(nome_ficheiro, lista_pop_cenouras, lista_pop_coel
         resultados.write(str(lista_pop_lobos[i]) + '\n')
     return resultados
 
-
+simulador("configuracao.txt")
