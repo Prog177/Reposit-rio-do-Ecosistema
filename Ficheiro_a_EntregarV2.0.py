@@ -133,14 +133,28 @@ def menu():
     elif  Resposta == "q":
         Output = "Simulador Terminado."
     if Resposta == 'd':
+        print('Qual a população que deseja representar?')
+        print('C -> cenouras, R -> coelhos, W -> lobos')
+        Pop = input()
         nao_necessario, cenouras, coelhos, lobos = simulador(Months[-1])
-        plt.plot(cenouras, color = 'g')
-        plt.plot(coelhos, color = 'orange')
-        plt.plot(lobos, color = 'b')
-        plt.xlabel('Número de Meses')
-        plt.ylabel('Número de Seres Vivos')
-        plt.title('Evolução das Populações')
-        plt.show()
+        if Pop == 'C':
+            plt.plot(cenouras, color = 'g')
+            plt.xlabel('Número de Meses')
+            plt.ylabel('Número de Cenouras')
+            plt.title('Evolução da População de Cenouras')
+            plt.show()
+        if Pop == 'R':
+            plt.plot(coelhos, color = 'orange')
+            plt.xlabel('Número de Meses')
+            plt.ylabel('Número de Coelhos')
+            plt.title('Evolução da População de Coelhos')
+            plt.show()
+        if Pop == 'W':
+            plt.plot(lobos, color = 'b')
+            plt.xlabel('Número de Meses')
+            plt.ylabel('Número de Lobos')
+            plt.title('Evolução da População de Lobos')
+            plt.show()
     return Output
 
     
