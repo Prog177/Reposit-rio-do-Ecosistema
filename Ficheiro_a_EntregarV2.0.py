@@ -51,7 +51,7 @@ def evoluir_populacao_lobos (Plo,Pco,Mco,Plomax,Mlo):
     return round(PloAfter)
 
 #Aqui começa a Etapa 4
-def simular_populacoes (num_meses, param):
+def simular_populacoes (num_meses, param, t):
     """ Calcula o número Cenouras Coelhos e Lobos após Um número de meses inserido pelo utilizador
     Requires: num_meses que deve ser um inteiro positivo, e um dicionário que contem as variáveis necessárias p'ra as fun~es utilizadas p'ra calcular o número de seres vivos
     Ensures: A string com o número de meses e os respectivos números de cada espéciede ser vivo.E depois 3 listas em que cada lista contem a quantidade em cada mês de cada espécie de ser vivo, as listas são respectivamente de Cenouras, Coelhos e Lobos.
@@ -65,7 +65,7 @@ def simular_populacoes (num_meses, param):
     AlternateListCo=[]
     AlternateListLo=[]
 
-    for Iteration in range(0, int(num_meses) + 1):
+    for Iteration in range(t, int(num_meses) + 1+ t):
         
         if Iteration==0:
             Month+=1
@@ -105,7 +105,7 @@ def simular_populacoes (num_meses, param):
             AlternateListLo.append(LobosIntermidiate)
             Month+=1
 
-    for Iteration2 in range(0, int(num_meses) +1):
+    for Iteration2 in range(t, int(num_meses) +1 + t):
         if Iteration2==0:
             FinalReturn += ('Mês '+str(MonthFor)+' : '+str(param["Pce0"])+' cenouras,'+str(param["Pco0"])+' coelhos,'+str(param["Pco0"])+' lobos')+('\n')
             MonthFor+=1
@@ -113,8 +113,9 @@ def simular_populacoes (num_meses, param):
         else:
             FinalReturn += ('Mês '+str(MonthFor)+' : '+str(param["Pce0"+str(Iteration2)])+' cenouras,'+str(param["Pco0"+str(Iteration2)])+' coelhos,'+str(param["Plo0"+str(Iteration2)])+' lobos')+("\n")
             MonthFor+=1
-        
-    return FinalReturn, AlternateListCen, AlternateListCo, AlternateListLo
+    
+    k = t + int(num_meses)
+    return FinalReturn, AlternateListCen, AlternateListCo, AlternateListLo, k
 
 #Aqui começa a Etapa 5 e Etapa 8
 def menu():
@@ -122,7 +123,7 @@ def menu():
     Requires: A função não requer quaisquer parâmetros
     Ensures: Calcula o número de cada espécie apôs um número específico de meses introduzido pelo utilizador ou constroí um gráfico com a evolução do ser vivo escolhido pelo utilizador do mês zero até ao mês introduzido pelo utilizador
     """
-    Months = []
+    Months = [0]
     print('(s)imular, (d)esenhar gráfico')
     Resposta = input()
     Resposta = Resposta.lower()
@@ -150,7 +151,8 @@ def menu():
         print("Caracter inválido!")
         return menu()
     elif  Resposta == 'q':
-        Output = 'fechar'
+        Months.append('q')
+        return Months
     elif Resposta == 'd':
         print('Qual a população que deseja representar?')
         print('C -> cenouras, R -> coelhos, W -> lobos')
@@ -172,7 +174,7 @@ def menu():
             Months.append('d')
             Months.append('w')
             return Months
-    return Output
+    return
 
 #Aqui começa a Etapa 6
 def obter_parametros(nome_ficheiro):
@@ -204,28 +206,40 @@ def simulador(nome_ficheiro):
         FuntionX = menu()
         x.append(1)
         t = 0
+        k = 0
     while True:
         if FuntionX == 'fechar':
             print('Simulador Terminado.')
             exit()
         if FuntionX[-2] == 's':
             if FuntionX[-1] == 'q':
-                print('Simulador Terminado.')
-                exit()
+                if t != 0:
+                    nao_necessario, cenouras, coelhos, lobos, k = simular_populacoes(t-1, obter_parametros('configuracao.txt'), t)
+                    gravar_resultado_simulacao('resultados.csv', cenouras, coelhos, lobos)
+                    print('Simulador Terminado.')
+                    exit()
+                    t = k
+                if t == 0:
+                    nao_necessario, cenouras, coelhos, lobos = simular_populacoes(0, obter_parametros('configuracao.txt'), 0)
+                    gravar_resultado_simulacao('resultados.csv', cenouras, coelhos, lobos)
+                    print('Simulador Terminado.')
+                    exit()
             else:
-                FinalAnswer, cenouras, coelhos, lobos  = simular_populacoes(FuntionX[-1],DicEco)
-                t = len(cenouras)
+                FinalAnswer, cenouras, coelhos, lobos, t  = simular_populacoes(FuntionX[-1],DicEco, t)
                 print(FinalAnswer)
                 FuntionX = menu()
         if FuntionX[-2] == 'd':
-            nao_necessario, cenouras, coelhos, lobos = simular_populacoes(t-1, obter_parametros('configuracao.txt'))
+            if t == 0:
+                nao_necessario, cenouras, coelhos, lobos = simular_populacoes(0, obter_parametros('configuracao.txt'), 0)
+            if t != 0:
+                nao_necessario, cenouras, coelhos, lobos = simular_populacoes(t-1, obter_parametros('configuracao.txt'), t)
             if FuntionX[-1] == 'c':
                     plt.plot(cenouras, linestyle='-', marker='o', color = 'orange')
                     plt.xlabel('Número de Meses')
                     plt.ylabel('Número de Cenouras')
                     plt.title('Simulação de Ecossistema')
                     plt.show()
-                    FuntionX = menu()  
+                    FuntionX = menu()
             if FuntionX[-1] == 'r':
                     plt.plot(coelhos, linestyle='-', marker='o', color = 'c')
                     plt.xlabel('Número de Meses')
@@ -241,6 +255,25 @@ def simulador(nome_ficheiro):
                     plt.show()
                     FuntionX = menu()
             if FuntionX[-1] == 'q':
+                if t != 0:
+                    nao_necessario, cenouras, coelhos, lobos, t = simular_populacoes(t-1, obter_parametros('configuracao.txt'), t)
+                    gravar_resultado_simulacao('resultados.csv', cenouras, coelhos, lobos)
+                    print('Simulador Terminado.')
+                    exit()
+                if t == 0:
+                    nao_necessario, cenouras, coelhos, lobos, t = simular_populacoes(0, obter_parametros('configuracao.txt'), 0)
+                    gravar_resultado_simulacao('resultados.csv', cenouras, coelhos, lobos)
+                    print('Simulador Terminado.')
+                    exit()
+        if FuntionX[-1] == 'q':
+            if t != 0:
+                nao_necessario, cenouras, coelhos, lobos = simular_populacoes(t-1, obter_parametros('configuracao.txt'), t)
+                gravar_resultado_simulacao('resultados.csv', cenouras, coelhos, lobos)
+                print('Simulador Terminado.')
+                exit()
+            if t == 0:
+                nao_necessario, cenouras, coelhos, lobos = simular_populacoes(0, obter_parametros('configuracao.txt'), t)
+                gravar_resultado_simulacao('resultados.csv', cenouras, coelhos, lobos)
                 print('Simulador Terminado.')
                 exit()
     return
@@ -248,10 +281,10 @@ def simulador(nome_ficheiro):
 #Aqui começa a Etapa 9
 def gravar_resultado_simulacao(nome_ficheiro, lista_pop_cenouras, lista_pop_coelhos, lista_pop_lobos):
     """Grava os resultados do número de cada ser vivo em cada mês num formato(.csv)
-    Requires:Um ficheiro (nome_ficheiro)uma lista com o número de cenouras em cada mês em que é efectuado a simulação(lista_pop_cenouras),uma lista com o número de coelhos em cada mês em que é efectuado a simulação(lista_pop_coelhos),uma lista com o número de lobos em cada mês em que é efectuado a simulação(lista_pop_lobos)
+    Requires:Um ficheiro (nome_ficheiro), uma lista com o número de cenouras em cada mês em que é efectuado a simulação(lista_pop_cenouras),uma lista com o número de coelhos em cada mês em que é efectuado a simulação(lista_pop_coelhos),uma lista com o número de lobos em cada mês em que é efectuado a simulação(lista_pop_lobos)
     Ensures: Um ficheiro .csv com cada mês e o respectivo número de cada ser vivo
     """
-    resultados = open('resultados.csv', 'a+')
+    resultados = open(nome_ficheiro, 'w')
     resultados.write('Mês' + ';')
     resultados.write('Cenouras' + ';')
     resultados.write('Coelhos' + ';')
