@@ -212,7 +212,7 @@ def simulador(nome_ficheiro):
         if FuntionX[-2] == 's':
             if FuntionX[-1] == 'q':
                 if t != 0:
-                    nao_necessario, cenouras, coelhos, lobos = simular_populacoes(t-1, DicEco)
+                    nao_necessario, cenouras, coelhos, lobos = simular_populacoes(t-2, DicEco)
                     gravar_resultado_simulacao('resultados.csv', cenouras, coelhos, lobos)
                     print('Simulador Terminado.')
                     exit()
@@ -222,7 +222,7 @@ def simulador(nome_ficheiro):
                     print('Simulador Terminado.')
                     exit()
             else:
-                FinalAnswer, cenouras, coelhos, lobos = simular_populacoes(FuntionX[-1],DicEco)
+                FinalAnswer, cenouras, coelhos, lobos = simular_populacoes(int(FuntionX[-1])+1,DicEco)
                 print(FinalAnswer)
                 t = len(cenouras)
                 FuntionX = menu()
@@ -230,8 +230,7 @@ def simulador(nome_ficheiro):
             if t == 0:
                 nao_necessario, cenouras, coelhos, lobos = simular_populacoes(0, DicEco)
             if t != 0:
-                nao_necessario, cenouras, coelhos, lobos = simular_populacoes(t-1, DicEco)
-                print(cenouras)
+                nao_necessario, cenouras, coelhos, lobos = simular_populacoes(t-2, DicEco)
             if FuntionX[-1] == 'c':
                     plt.plot(cenouras, linestyle='-', marker='o', color = 'orange')
                     plt.xlabel('Número de Meses')
@@ -255,7 +254,7 @@ def simulador(nome_ficheiro):
                     FuntionX = menu()
             if FuntionX[-1] == 'q':
                 if t != 0:
-                    nao_necessario, cenouras, coelhos, lobos = simular_populacoes(t-1, DicEco)
+                    nao_necessario, cenouras, coelhos, lobos = simular_populacoes(t-2, DicEco)
                     gravar_resultado_simulacao('resultados.csv', cenouras, coelhos, lobos)
                     print('Simulador Terminado.')
                     exit()
@@ -266,7 +265,7 @@ def simulador(nome_ficheiro):
                     exit()
         if FuntionX[-1] == 'q':
             if t != 0:
-                nao_necessario, cenouras, coelhos, lobos = simular_populacoes(t-1, DicEco)
+                nao_necessario, cenouras, coelhos, lobos = simular_populacoes(t-2, DicEco)
                 gravar_resultado_simulacao('resultados.csv', cenouras, coelhos, lobos)
                 print('Simulador Terminado.')
                 exit()
@@ -296,4 +295,3 @@ def gravar_resultado_simulacao(nome_ficheiro, lista_pop_cenouras, lista_pop_coel
     return resultados
 
 simulador("configuracao.txt")
-
