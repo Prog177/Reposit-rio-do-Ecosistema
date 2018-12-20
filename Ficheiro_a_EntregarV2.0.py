@@ -51,7 +51,7 @@ def evoluir_populacao_lobos (Plo,Pco,Mco,Plomax,Mlo):
     return round(PloAfter)
 
 #Aqui começa a Etapa 4
-def simular_populacoes (num_meses,param):
+def simular_populacoes (num_meses, param):
     """ Calcula o número Cenouras Coelhos e Lobos após Um número de meses inserido pelo utilizador
     Requires: num_meses que deve ser um inteiro positivo, e um dicionário que contem as variáveis necessárias p'ra as fun~es utilizadas p'ra calcular o número de seres vivos
     Ensures: A string com o número de meses e os respectivos números de cada espéciede ser vivo.E depois 3 listas em que cada lista contem a quantidade em cada mês de cada espécie de ser vivo, as listas são respectivamente de Cenouras, Coelhos e Lobos.
@@ -122,7 +122,7 @@ def menu():
     Requires: A função não requer quaisquer parâmetros
     Ensures: Calcula o número de cada espécie apôs um número específico de meses introduzido pelo utilizador ou constroí um gráfico com a evolução do ser vivo escolhido pelo utilizador do mês zero até ao mês introduzido pelo utilizador
     """
-    Months = [0]
+    Months = []
     print('(s)imular, (d)esenhar gráfico')
     Resposta = input()
     Resposta = Resposta.lower()
@@ -131,8 +131,9 @@ def menu():
         Resposta1 = input('')
         Resposta1 = Resposta1.lower()
         if Resposta1.isdigit():
+            Months.append('s')
             Months.append(Resposta1)
-            Output = Months[-1]
+            return Months
         else:
             if Resposta1 == 'a':
                 return menu()
@@ -140,7 +141,9 @@ def menu():
                 print("Caracter inválido!")
                 return menu()
             if  Resposta1 == 'q':
-                Output = 'fechar'
+                Months.append('s')
+                Months.append('q')
+                return Months
     elif Resposta == 'a':
         return menu()
     elif Resposta != 's' and Resposta != 'a' and Resposta != 'q' and Resposta != 'd':
@@ -153,54 +156,22 @@ def menu():
         print('C -> cenouras, R -> coelhos, W -> lobos')
         Pop = input('')
         Pop = Pop.lower()
-        nao_necessario, cenouras, coelhos, lobos = simular_populacoes(Months[-1], obter_parametros('configuracao.txt'))
         if Pop == 'q' or Pop == 'Q':
-            Output = 'fechar'
+            Months.append('d')
+            Months.append('q')
+            return Months
         if Pop == 'c':
-            if Months[-1] == 0:
-                plt.plot(cenouras, 'o', color = 'orange')
-                plt.xlabel('Número de Meses')
-                plt.ylabel('Número de Cenouras')
-                plt.title('Simulação de Ecossistema')
-                plt.show()
-                return menu()
-            if Months[-1] != 0:
-                plt.plot(cenouras, color = 'orange')
-                plt.xlabel('Número de Meses')
-                plt.ylabel('Número de Cenouras')
-                plt.title('Simulação de Ecossistema')
-                plt.show()
-                return menu()    
+            Months.append('d')
+            Months.append('c')
+            return Months
         if Pop == 'r':
-            if Months[-1] == 0:
-                plt.plot(coelhos, 'o', color = 'c')
-                plt.xlabel('Número de Meses')
-                plt.ylabel('Número de Coelhos')
-                plt.title('Simulação de Ecossistema')
-                plt.show()
-                return menu()
-            if Months[-1] != 0:
-                plt.plot(coelhos, color = 'c')
-                plt.xlabel('Número de Meses')
-                plt.ylabel('Número de Coelhos')
-                plt.title('Simulação de Ecossistema')
-                plt.show()
-                return menu()
+            Months.append('d')
+            Months.append('r')
+            return Months
         if Pop == 'w':
-            if Months[-1] == 0:
-                plt.plot(lobos, 'o', color = 'b')
-                plt.xlabel('Número de Meses')
-                plt.ylabel('Número de Lobos')
-                plt.title('Simulação de Ecossistema')
-                plt.show()
-                return menu()
-            if Months[-1] != 0:
-                plt.plot(lobos, color = 'b')
-                plt.xlabel('Número de Meses')
-                plt.ylabel('Número de Lobos')
-                plt.title('Simulação de Ecossistema')
-                plt.show()
-                return menu()
+            Months.append('d')
+            Months.append('w')
+            return Months
     return Output
 
 #Aqui começa a Etapa 6
@@ -227,14 +198,51 @@ def simulador(nome_ficheiro):
     Requires: Um ficheiro (nome_ficheiro) com as variáveis necessárias p'ra simular cada espécie
     Ensures: Uma string com o mês e o número de cada ser vivo p'ra cada espécie e em cada mês
     """
+    x = [0]
     DicEco = obter_parametros(nome_ficheiro)
-    FuntionX = menu()
-    if FuntionX == 'fechar':
-        print('Simulador Terminado.')
-    else:
-        FinalAnswer = simular_populacoes(FuntionX,DicEco)
-        print(FinalAnswer)
-        menu()
+    while x[-1] == 0:
+        FuntionX = menu()
+        x.append(1)
+        t = 0
+    while True:
+        if FuntionX == 'fechar':
+            print('Simulador Terminado.')
+            exit()
+        if FuntionX[-2] == 's':
+            if FuntionX[-1] == 'q':
+                print('Simulador Terminado.')
+                exit()
+            else:
+                FinalAnswer, cenouras, coelhos, lobos  = simular_populacoes(FuntionX[-1],DicEco)
+                t = len(cenouras)
+                print(FinalAnswer)
+                FuntionX = menu()
+        if FuntionX[-2] == 'd':
+            nao_necessario, cenouras, coelhos, lobos = simular_populacoes(t-1, obter_parametros('configuracao.txt'))
+            if FuntionX[-1] == 'c':
+                    plt.plot(cenouras, linestyle='-', marker='o', color = 'orange')
+                    plt.xlabel('Número de Meses')
+                    plt.ylabel('Número de Cenouras')
+                    plt.title('Simulação de Ecossistema')
+                    plt.show()
+                    FuntionX = menu()  
+            if FuntionX[-1] == 'r':
+                    plt.plot(coelhos, linestyle='-', marker='o', color = 'c')
+                    plt.xlabel('Número de Meses')
+                    plt.ylabel('Número de Coelhos')
+                    plt.title('Simulação de Ecossistema')
+                    plt.show()
+                    FuntionX = menu()
+            if FuntionX[-1] == 'w':
+                    plt.plot(lobos, linestyle='-', marker='o', color = 'b')
+                    plt.xlabel('Número de Meses')
+                    plt.ylabel('Número de Lobos')
+                    plt.title('Simulação de Ecossistema')
+                    plt.show()
+                    FuntionX = menu()
+            if FuntionX[-1] == 'q':
+                print('Simulador Terminado.')
+                exit()
     return
 
 #Aqui começa a Etapa 9
