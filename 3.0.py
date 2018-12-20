@@ -64,7 +64,7 @@ def simular_populacoes (num_meses, param, t):
     AlternateListCo=[]
     AlternateListLo=[]
 
-    for Iteration in range(int(t), int(num_meses) + 1 + int(t)):
+    for Iteration in range(0, int(num_meses) + 1 + int(t)):
         
         if Iteration==0:
             Month+=1
@@ -83,7 +83,6 @@ def simular_populacoes (num_meses, param, t):
             param["Mlo"+str(Iteration)] = param["Mlo"]
 
         else:
-            print(t)
             Iteration-=1
             CenourasIntermidiate=evoluir_populacao_cenouras (param["Pce0"+str(Iteration)],param["Rce"],param["Pcemax"],param["Mce"],param["Pco0"+str(Iteration)])
             CoelhosIntermidiate=evoluir_populacao_coelhos (param["Pco0"+str(Iteration)],param["Pce0"+str(Iteration)],param["Mce"],param["Pcomax"],param["Mco"],param["Plo0"+str(Iteration)])
@@ -220,9 +219,14 @@ def simulador(nome_ficheiro):
                     print('Simulador Terminado.')
                     exit()
             else:
-                FinalAnswer, cenouras, coelhos, lobos, param, t = simular_populacoes(int(FuntionX[-1])+1,DicEco, t)
-                print(FinalAnswer)
-                FuntionX = menu()
+                if t == 0:
+                    FinalAnswer, cenouras, coelhos, lobos, param, t = simular_populacoes(int(FuntionX[-1])+1,DicEco, t)
+                    print(FinalAnswer)
+                    FuntionX = menu()
+                if t != 0:
+                    FinalAnswer, cenouras, coelhos, lobos, param, t = simular_populacoes(int(FuntionX[-1]),DicEco, t)
+                    print(FinalAnswer)
+                    FuntionX = menu()
         if FuntionX[-2] == 'd':
             if t == 0:
                 nao_necessario, cenouras, coelhos, lobos, param, t = simular_populacoes(0, DicEco, t)
